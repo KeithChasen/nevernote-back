@@ -1,5 +1,6 @@
 import { AppDataSource } from "./data-source";
 import express from 'express';
+import { CONST } from "./constants/strings";
 
 AppDataSource.initialize().then(async () => {
     const app = express();
@@ -8,7 +9,7 @@ AppDataSource.initialize().then(async () => {
         res.send('hello')
     })
 
-    app.listen(4000, () =>
-        console.log('server running http://localhost:4000')
+    app.listen(CONST.PORT, () =>
+        console.log(`server running http://localhost:${CONST.PORT}`)
     )
 }).catch(error => console.log(error))
