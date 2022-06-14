@@ -10,3 +10,22 @@ Steps to run this project:
 
 `npx typeorm init --name server --database mysql --docker
 `
+
+Update packages with yarn
+
+`yarn install`
+
+`yarn upgrade-interactive --latest `
+
+init tsconfig
+
+`npx tsc --init`
+
+add more packages
+
+`yarn add express apollo-server-express jsonwebtoken type-graphql cors morgan
+`
+
+add types for these
+
+`yarn add -D @types/morgan @types/jsonwebtoken`
