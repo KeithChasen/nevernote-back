@@ -6,6 +6,7 @@ import morgan from "morgan";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./graphql/UserResolver";
+import { MyContext } from "./graphql/UserResolver";
 
 AppDataSource.initialize().then(async () => {
     const app = express();
@@ -20,7 +21,8 @@ AppDataSource.initialize().then(async () => {
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
             resolvers: [UserResolver]
-        })
+        }),
+        context: ({ req, res }): MyContext => ({ req, res})
     });
 
     await apolloServer.start();
