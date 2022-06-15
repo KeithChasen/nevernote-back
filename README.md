@@ -29,3 +29,7 @@ add more packages
 add types for these
 
 `yarn add -D @types/morgan @types/jsonwebtoken`
+
+`yarn add bcryptjs`
+
+`yarn add -D @types/bcryptjs`
