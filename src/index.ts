@@ -3,7 +3,9 @@ import express from 'express';
 import { CONST } from "./constants/strings";
 import cors from 'cors';
 import morgan from "morgan";
-import { ApolloServer, gql } from "apollo-server-express";
+import { ApolloServer } from "apollo-server-express";
+import { buildSchema } from "type-graphql";
+import { UserResolver } from "./graphql/UserResolver";
 
 AppDataSource.initialize().then(async () => {
     const app = express();
@@ -16,16 +18,9 @@ AppDataSource.initialize().then(async () => {
     });
 
     const apolloServer = new ApolloServer({
-        typeDefs: gql`
-          type Query {
-              hello: String!
-          }
-        `,
-        resolvers: {
-            Query: {
-                hello: () => "Hello there"
-            }
-        }
+        schema: await buildSchema({
+            resolvers: [UserResolver]
+        })
     });
 
     await apolloServer.start();
