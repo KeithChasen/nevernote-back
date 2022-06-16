@@ -11,7 +11,10 @@ import { MyContext } from "./graphql/UserResolver";
 AppDataSource.initialize().then(async () => {
     const app = express();
 
-    app.use(cors());
+    app.use(cors({
+        origin: 'http://localhost:3000',
+        credentials: true
+    }));
     app.use(morgan('dev'));
 
     app.get('/', (req, res) => {
@@ -27,7 +30,7 @@ AppDataSource.initialize().then(async () => {
 
     await apolloServer.start();
 
-    apolloServer.applyMiddleware({ app });
+    apolloServer.applyMiddleware({ app, cors: false });
 
     app.listen(CONST.PORT, () =>
         console.log(`server running http://localhost:${CONST.PORT}/graphql`)
