@@ -15,6 +15,7 @@ import {
     sendRefreshToken
 } from "./helpers/generateToken";
 import cookieParser from 'cookie-parser';
+import {NoteResolver} from "./graphql/NoteResolver";
 
 AppDataSource.initialize().then(async () => {
     const app = express();
@@ -58,7 +59,7 @@ AppDataSource.initialize().then(async () => {
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [UserResolver]
+            resolvers: [UserResolver, NoteResolver]
         }),
         context: ({ req, res }): MyContext => ({ req, res})
     });

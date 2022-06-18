@@ -27,7 +27,7 @@ export class Note extends BaseEntity {
 
     @Field(() => User)
     @ManyToOne(() => User, (user) => user.id)
-    createdBy: string;
+    created_by: string;
 
     @Field(() => String)
     @CreateDateColumn()

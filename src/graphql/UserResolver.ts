@@ -10,7 +10,10 @@ import {isAuth} from "../helpers/isAuth";
 export interface MyContext {
     res: Response,
     req: Request
-    tokenPayload?: any
+    tokenPayload?: {
+        userId: string,
+        tokenVersion?: number
+    }
 }
 
 @ObjectType()
@@ -32,7 +35,7 @@ export class UserResolver {
         const payload = ctx.tokenPayload;
         if (!payload) return null;
         try {
-            return await User.findOne(payload.userId);
+            return await User.findOne({ where: { id: payload.userId } });
         } catch (e) {
             console.error(e);
             return null;

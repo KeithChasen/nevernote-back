@@ -31,6 +31,6 @@ export class User extends BaseEntity {
     @Column('int', { default: 0 })
     token_version: number;
 
-    @OneToMany(() => Note, (note) => note.createdBy)
+    @OneToMany(() => Note, (note) => note.created_by)
     notes: Note[];
 }
