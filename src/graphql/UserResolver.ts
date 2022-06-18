@@ -1,24 +1,16 @@
-import {
-    Arg,
-    Ctx,
-    Field,
-    Mutation,
-    ObjectType,
-    Query,
-    Resolver
-} from "type-graphql";
-import { User } from "../entity/User";
-import { compare, hash } from "bcryptjs";
-import {
-    generateAccessToken,
-    generateRefreshToken
-} from "../helpers/generateToken";
-import { Request, Response } from "express";
-import { CONST } from "../constants/strings";
+import {Arg, Ctx, Field, Mutation, ObjectType, Query, Resolver, UseMiddleware} from "type-graphql";
+import {User} from "../entity/User";
+import {compare, hash} from "bcryptjs";
+import {generateAccessToken, generateRefreshToken, sendRefreshToken} from "../helpers/generateToken";
+import {Request, Response} from "express";
+import {CONST} from "../constants/strings";
+import {AppDataSource} from "../data-source";
+import {isAuth} from "../helpers/isAuth";
 
 export interface MyContext {
     res: Response,
     req: Request
+    tokenPayload?: any
 }
 
 @ObjectType()
@@ -32,6 +24,19 @@ export class UserResolver {
     @Query(() => String)
     hello() {
         return "Hello there";
+    }
+
+    @Query()
+    @UseMiddleware(isAuth)
+    async me(@Ctx() ctx: MyContext) {
+        const payload = ctx.tokenPayload;
+        if (!payload) return null;
+        try {
+            return await User.findOne(payload.userId);
+        } catch (e) {
+            console.error(e);
+            return null;
+        }
     }
 
     @Mutation(() => Boolean)
@@ -77,11 +82,21 @@ export class UserResolver {
                 httpOnly: true
             })
 
+            sendRefreshToken(res, refreshToken);
+
             return {
                 access_token: accessToken
             };
         } catch (error: any) {
             throw new Error(error);
         }
+    }
+
+    @Mutation(() => Boolean)
+    async revokeUserSession(@Arg('userId') userId: string) {
+        await AppDataSource
+            .getRepository(User)
+            .increment({ id: userId! }, 'token_version', 1);
+        return true;
     }
 }
