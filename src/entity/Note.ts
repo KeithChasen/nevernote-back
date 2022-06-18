@@ -25,9 +25,9 @@ export class Note extends BaseEntity {
     @Column("longtext")
     content: string;
 
-    @Field(() => User)
-    @ManyToOne(() => User, (user) => user.id)
-    created_by: string;
+    // @Field(() => User)
+    @ManyToOne(() => User, (user) => user.notes)
+    user: User;
 
     @Field(() => String)
     @CreateDateColumn()

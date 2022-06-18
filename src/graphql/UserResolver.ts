@@ -29,13 +29,16 @@ export class UserResolver {
         return "Hello there";
     }
 
-    @Query()
+    @Query(() => User)
     @UseMiddleware(isAuth)
     async me(@Ctx() ctx: MyContext) {
         const payload = ctx.tokenPayload;
         if (!payload) return null;
         try {
-            return await User.findOne({ where: { id: payload.userId } });
+            return await User.findOne({
+                where: { id: payload.userId },
+                relations: { notes: true }
+            });
         } catch (e) {
             console.error(e);
             return null;

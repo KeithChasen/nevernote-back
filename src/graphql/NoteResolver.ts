@@ -22,10 +22,13 @@ export class NoteResolver {
     ) {
         try {
             const user = await User.findOne({ where: { id: ctx.tokenPayload?.userId } })
+            if (!user)
+                throw new Error('User not found');
+
             const newNote = await new Note();
             newNote.title = title;
             newNote.content = content;
-            newNote.created_by = user!.id;
+            newNote.user = user;
             await newNote.save();
             return newNote;
         } catch (e) {
@@ -44,7 +47,7 @@ export class NoteResolver {
         try {
             const note = await Note.findOne({
                 where: { id: noteId },
-                relations: { created_by: true }
+                relations: { user: true }
             });
             if (!note)
                 throw new Error('Note not found');
@@ -65,7 +68,7 @@ export class NoteResolver {
         try {
             const note = await Note.findOne({
                 where: { id: noteId },
-                relations: { created_by: true }
+                relations: { user: true }
             });
             if (!note)
                 throw new Error('Note not found');
