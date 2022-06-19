@@ -1,11 +1,24 @@
-import {Arg, Ctx, Field, Mutation, ObjectType, Query, Resolver, UseMiddleware} from "type-graphql";
-import {User} from "../entity/User";
-import {compare, hash} from "bcryptjs";
-import {generateAccessToken, generateRefreshToken, sendRefreshToken} from "../helpers/generateToken";
-import {Request, Response} from "express";
-import {CONST} from "../constants/strings";
-import {AppDataSource} from "../data-source";
-import {isAuth} from "../helpers/isAuth";
+import {
+    Arg,
+    Ctx,
+    Field,
+    Mutation,
+    ObjectType,
+    Query,
+    Resolver,
+    UseMiddleware
+} from "type-graphql";
+import { User } from "../entity/User";
+import { compare, hash } from "bcryptjs";
+import {
+    generateAccessToken,
+    generateRefreshToken,
+    sendRefreshToken
+} from "../helpers/generateToken";
+import { Request, Response } from "express";
+import { CONST } from "../constants/strings";
+import { AppDataSource } from "../data-source";
+import { isAuth } from "../helpers/isAuth";
 
 export interface MyContext {
     res: Response,

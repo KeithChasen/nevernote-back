@@ -25,7 +25,7 @@ export class Note extends BaseEntity {
     @Column("longtext")
     content: string;
 
-    // @Field(() => User)
+    @Field(() => User)
     @ManyToOne(() => User, (user) => user.notes)
     user: User;
 

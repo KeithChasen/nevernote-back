@@ -1,4 +1,11 @@
-import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
+import {
+    Arg,
+    Ctx,
+    Mutation,
+    Query,
+    Resolver,
+    UseMiddleware
+} from "type-graphql";
 import { User } from "../entity/User";
 import { isAuth } from "../helpers/isAuth";
 import { Note } from "../entity/Note";
@@ -10,7 +17,7 @@ export class NoteResolver {
     @Query(() => [Note])
     @UseMiddleware(isAuth)
     async listNotes(@Ctx() ctx: MyContext) {
-        return Note.find({ relations: ['created_by']});
+        return Note.find({ relations: { user: true } });
     }
 
     @Mutation(() => Note)
