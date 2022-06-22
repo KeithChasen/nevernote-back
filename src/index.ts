@@ -43,7 +43,10 @@ AppDataSource.initialize().then(async () => {
             return res.send({ success: false, access_token: '' });
         }
 
-        const user = await User.findOne(data.userId);
+        const user = await User.findOne({ where: {
+                id: data.userId
+            }
+        });
         if (!user)
             return res.send({ success: false, access_token: '' });
 
