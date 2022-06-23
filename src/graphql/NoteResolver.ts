@@ -19,7 +19,8 @@ export class NoteResolver {
     @UseMiddleware(isAuth)
     async listNotes(
         @Ctx() ctx: MyContext,
-        @Arg('search', { defaultValue: '' }) search: string
+        @Arg('search', { defaultValue: '' }) search: string,
+        @Arg('orderBy', { defaultValue: 'DESC' }) orderBy: string,
     ) {
         return Note.find({
             relations: { user: true },
@@ -28,7 +29,10 @@ export class NoteResolver {
                 user: {
                     id: ctx.tokenPayload?.userId
                 }
-            }
+            },
+           order: {
+                created_at: orderBy === 'DESC' ? 'DESC' : 'ASC'
+           }
         });
     }
 
